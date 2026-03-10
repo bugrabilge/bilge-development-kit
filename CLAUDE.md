@@ -92,14 +92,43 @@ When user's prompt is NOT in English:
 2. Identify dependent files
 3. Update ALL affected files together
 
+### Hooks (Automated Guardrails)
+
+**Active automatically via `.claude/settings.json`.** No manual intervention needed.
+
+- **PreToolUse:Bash** → `dangerous_cmd_check.sh` blocks destructive commands
+- **PreToolUse:Write|Edit** → `secret_scanner.sh` blocks hardcoded secrets
+- **PostToolUse:Edit|Write** → `lint_check.sh` runs lint after file changes
+- **Stop** → `session_save.sh` persists session context
+
+### Always-On Rules
+
+**MANDATORY:** Rules in `.agent/rules/common/` apply to ALL code output:
+- `git-workflow.md` - Conventional Commits, branch naming
+- `coding-style.md` - Naming conventions, file organization
+- `testing.md` - AAA pattern, coverage targets
+- `security.md` - Secrets, OWASP, input validation
+- `performance.md` - Core Web Vitals, bundle limits
+
+### Contexts (Mode-Specific)
+
+Load appropriate context from `.agent/contexts/` based on task:
+- `dev.md` - Development/prototyping mode
+- `review.md` - Code review mode
+- `research.md` - Analysis/comparison mode
+
 ### System Map Read
 
-**MANDATORY:** Read `.agent/ARCHITECTURE.md` at session start to understand Agents, Skills, and Scripts.
+**MANDATORY:** Read `.agent/ARCHITECTURE.md` at session start to understand Agents, Skills, Scripts, Hooks, Rules, and Contexts.
 
 **Path Awareness:**
 - Agents: `.agent/agents/`
 - Skills: `.agent/skills/`
 - Runtime Scripts: `.agent/skills/<skill>/scripts/`
+- Hooks: `.agent/scripts/hooks/`
+- Rules: `.agent/rules/common/`
+- Contexts: `.agent/contexts/`
+- PM Detection: `.agent/scripts/detect_pm.py`
 
 ### Read -> Understand -> Apply
 

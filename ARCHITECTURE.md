@@ -9,9 +9,12 @@
 Bilge Development Kit is a modular system consisting of:
 
 - **23 Specialist Agents** - Role-based AI personas
-- **95 Skills** - Domain-specific knowledge modules
-- **14 Workflows** - Slash command procedures
-- **4 Scripts** - Automation and validation tools
+- **96 Skills** - Domain-specific knowledge modules
+- **15 Workflows** - Slash command procedures
+- **6 Scripts** - Automation and validation tools
+- **4 Hooks** - Automated guardrails (secret scanning, dangerous cmd detection)
+- **5 Rules** - Always-on coding standards
+- **3 Contexts** - Mode-specific behavior (dev, review, research)
 
 ---
 
@@ -25,10 +28,34 @@ Bilge Development Kit is a modular system consisting of:
 ├── .shared/                 # Shared assets across skills
 │   └── ui-ux-pro-max/      # Shared UI/UX resources
 ├── agents/                  # 23 Specialist Agents
-├── skills/                  # 95 Skills + doc.md guide
-├── workflows/               # 14 Slash Commands
-├── rules/                   # Global Rules (CLAUDE.md, GEMINI.md)
-└── scripts/                 # 4 Automation Scripts
+├── skills/                  # 96 Skills + doc.md guide
+├── workflows/               # 15 Slash Commands
+├── rules/                   # Global Rules + Always-On Standards
+│   ├── CLAUDE.md            # Claude Code protocol rules
+│   ├── GEMINI.md            # Gemini protocol rules
+│   └── common/              # Always-on coding standards
+│       ├── git-workflow.md  # Commit format, branch naming, PR rules
+│       ├── coding-style.md  # Naming conventions, file organization
+│       ├── testing.md       # Test requirements, AAA pattern, coverage
+│       ├── security.md      # Secrets, input validation, OWASP
+│       └── performance.md   # Core Web Vitals, bundle size, caching
+├── contexts/                # Mode-specific behavior contexts
+│   ├── dev.md               # Development mode
+│   ├── review.md            # Code review mode
+│   └── research.md          # Research/analysis mode
+├── scripts/                 # 6 Automation Scripts
+│   ├── hooks/               # Hook scripts (guardrails)
+│   │   ├── dangerous_cmd_check.sh  # Block destructive commands
+│   │   ├── secret_scanner.sh       # Detect hardcoded secrets
+│   │   ├── lint_check.sh           # Post-edit lint verification
+│   │   └── session_save.sh         # Session context persistence
+│   ├── detect_pm.py         # Package manager auto-detection
+│   ├── checklist.py         # Priority-based validation
+│   ├── verify_all.py        # Comprehensive verification
+│   ├── auto_preview.py      # Dev server management
+│   └── session_manager.py   # Project state analysis
+└── .claude/
+    └── settings.json        # Hooks configuration
 ```
 
 ---
@@ -275,6 +302,7 @@ Slash command procedures. Invoke with `/command`.
 | `/status`        | Check project status     |
 | `/test`          | Run tests                |
 | `/ui-ux-pro-max` | Design with 50 styles    |
+| `/build-fix`     | Build error resolver     |
 
 ---
 
@@ -300,7 +328,7 @@ skill-name/
 
 ---
 
-## Scripts (4)
+## Scripts (6)
 
 Automation and validation scripts.
 
@@ -310,6 +338,7 @@ Automation and validation scripts.
 | `verify_all.py`      | Comprehensive verification (all checks)      | Pre-deployment, releases  |
 | `auto_preview.py`    | Dev server management (start/stop/status)    | Local preview, testing    |
 | `session_manager.py` | Project state analysis, tech stack detection | Session info, diagnostics |
+| `detect_pm.py`       | Package manager auto-detection               | Build/test/deploy commands|
 
 ### Usage
 
@@ -352,14 +381,56 @@ python .agent/scripts/session_manager.py info [path]
 
 ---
 
+## Hooks (4)
+
+Automated guardrails configured in `.claude/settings.json`. Run automatically without user intervention.
+
+| Hook                      | Event        | Matcher      | Purpose                              |
+| ------------------------- | ------------ | ------------ | ------------------------------------ |
+| `dangerous_cmd_check.sh`  | PreToolUse   | Bash         | Block destructive commands           |
+| `secret_scanner.sh`       | PreToolUse   | Write\|Edit  | Detect hardcoded secrets/credentials |
+| `lint_check.sh`           | PostToolUse  | Edit\|Write  | Auto-lint after file changes         |
+| `session_save.sh`         | Stop         | (all)        | Persist session context to memory    |
+
+---
+
+## Always-On Rules (5)
+
+Located in `rules/common/`. Applied automatically to all code output.
+
+| Rule              | Enforces                                        |
+| ----------------- | ----------------------------------------------- |
+| `git-workflow.md` | Conventional Commits, branch naming, PR format  |
+| `coding-style.md` | Naming conventions, file organization, imports  |
+| `testing.md`      | AAA pattern, coverage targets, test pyramid     |
+| `security.md`     | Secret management, OWASP, input validation      |
+| `performance.md`  | Core Web Vitals, bundle size, caching strategy  |
+
+---
+
+## Contexts (3)
+
+Mode-specific behavior adjustments in `contexts/`. Load based on task type.
+
+| Context        | When Active                     | Behavior Focus           |
+| -------------- | ------------------------------- | ------------------------ |
+| `dev.md`       | Writing new code, prototyping   | Fast iteration, debug    |
+| `review.md`    | Code review, PR assessment      | Quality checklist, SOLID |
+| `research.md`  | Tech comparison, investigation  | Evidence-based, tables   |
+
+---
+
 ## Statistics
 
 | Metric              | Value  |
 | ------------------- | ------ |
 | **Total Agents**    | 23     |
-| **Total Skills**    | 95     |
-| **Total Workflows** | 14     |
-| **Total Scripts**   | 4      |
+| **Total Skills**    | 96     |
+| **Total Workflows** | 15     |
+| **Total Scripts**   | 6      |
+| **Total Hooks**     | 4      |
+| **Total Rules**     | 5      |
+| **Total Contexts**  | 3      |
 
 ---
 
