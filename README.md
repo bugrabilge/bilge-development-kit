@@ -70,7 +70,7 @@ BDK bu boşluğu doldurur:
 
 ```bash
 git clone https://github.com/bugrabilge/bilge-development-kit.git
-cp -r bilge-development-kit/.agent your-project/.agent
+cp -r bilge-development-kit your-project/.agent
 ```
 
 ### 2. Platforma göre ayarlayın
