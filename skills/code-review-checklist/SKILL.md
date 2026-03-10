@@ -1,6 +1,6 @@
 ---
 name: code-review-checklist
-description: "Comprehensive checklist for conducting thorough code reviews covering functionality, security, performance, and maintainability"
+description: "Comprehensive checklist and excellence guide for conducting thorough code reviews covering functionality, security, performance, maintainability, and constructive feedback techniques"
 risk: unknown
 source: community
 ---
@@ -444,3 +444,65 @@ This is great because [explain why]
 ---
 
 **Pro Tip:** Use a checklist template for every review to ensure consistency and thoroughness. Customize it for your team's specific needs!
+
+---
+
+## Review Excellence: Feedback & Communication
+
+> Transform code reviews from gatekeeping to knowledge sharing through constructive feedback, systematic analysis, and collaborative improvement.
+
+### Output Format
+
+- High-level summary of findings
+- Issues grouped by severity (blocking, important, minor)
+- Suggestions and questions
+- Test and coverage notes
+
+### The Review Mindset
+
+**Goals of Code Review:**
+- Catch bugs and edge cases
+- Ensure code maintainability
+- Share knowledge across team
+- Enforce coding standards
+- Improve design and architecture
+
+**Not the Goals:**
+- Show off knowledge
+- Nitpick formatting (use linters)
+- Block progress unnecessarily
+- Rewrite to your preference
+
+### Severity Labels
+
+Use labels to indicate priority:
+- `[blocking]` - Must fix before merge
+- `[important]` - Should fix, discuss if disagree
+- `[nit]` - Nice to have, not blocking
+- `[suggestion]` - Alternative approach to consider
+- `[learning]` - Educational comment, no action needed
+- `[praise]` - Good work, keep it up!
+
+### Feedback Techniques
+
+**The Question Approach** - Instead of stating problems, ask questions:
+- "What happens if `items` is an empty array?"
+- "How should this behave if the API call fails?"
+
+**Suggest, Don't Command** - Use collaborative language:
+- "Suggestion: async/await might make this more readable. What do you think?"
+- "This logic appears in 3 places. Would it make sense to extract it?"
+
+**Handling Disagreements:**
+1. Seek to understand: "Help me understand your approach."
+2. Acknowledge valid points
+3. Provide data (benchmarks, examples)
+4. Escalate if needed to architect/senior dev
+5. Know when to let go - perfection is the enemy of progress
+
+### Review Process Timing
+
+1. **Context Gathering** (2-3 min): Read PR description, check size, CI status
+2. **High-Level Review** (5-10 min): Architecture, design fit, testing strategy
+3. **Line-by-Line Review** (10-20 min): Logic, security, performance, maintainability
+4. **Summary & Decision** (2-3 min): Summarize, highlight positives, make clear decision

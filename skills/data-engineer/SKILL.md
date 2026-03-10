@@ -1,9 +1,6 @@
 ---
 name: data-engineer
-description: "Build scalable data pipelines, modern data warehouses, and"
-  real-time streaming architectures. Implements Apache Spark, dbt, Airflow, and
-  cloud-native data platforms. Use PROACTIVELY for data pipeline design,
-  analytics infrastructure, or modern data stack implementation.
+description: "Build scalable data pipelines, modern data warehouses, real-time streaming, data quality frameworks, and data-driven feature development. Implements Apache Spark, dbt, Airflow, Great Expectations, and cloud-native data platforms. Use PROACTIVELY for data pipeline design, analytics infrastructure, data quality, or modern data stack implementation."
 metadata:
   model: opus
 risk: unknown
@@ -224,3 +221,173 @@ Expert data engineer specializing in building robust, scalable data pipelines an
 - "Build a change data capture pipeline for real-time synchronization between databases"
 - "Implement a data mesh architecture with domain-specific data products"
 - "Create a scalable ETL pipeline that handles late-arriving and out-of-order data"
+
+---
+
+## Data Pipeline Architecture Patterns
+
+### Architecture Selection
+- **ETL** (transform before load): Best when transformations are complex and target schema is fixed
+- **ELT** (load then transform): Best with powerful data warehouses (Snowflake, BigQuery)
+- **Lambda** (batch + speed layers): When both real-time and batch analytics are needed
+- **Kappa** (stream-only): When all data can be modeled as streams
+- **Lakehouse** (unified): Combines data lake flexibility with warehouse structure
+
+### Batch Ingestion Best Practices
+- Incremental loading with watermark columns
+- Retry logic with exponential backoff
+- Schema validation and dead letter queue for invalid records
+- Metadata tracking (`_extracted_at`, `_source`)
+
+### Streaming Best Practices
+- Kafka consumers with exactly-once semantics
+- Manual offset commits within transactions
+- Windowing for time-based aggregations
+- Error handling and replay capability
+
+### Orchestration Patterns
+
+**Airflow**: Task groups, XCom for inter-task communication, SLA monitoring, incremental execution with `execution_date`, retry with exponential backoff.
+
+**Prefect**: Task caching for idempotency, parallel execution with `.submit()`, artifacts for visibility, automatic retries.
+
+### Transformation with dbt
+- **Staging layer**: Incremental materialization, deduplication, late-arriving data handling
+- **Marts layer**: Dimensional models, aggregations, business logic
+- **Tests**: unique, not_null, relationships, accepted_values, custom data quality tests
+- **Sources**: Freshness checks, `loaded_at_field` tracking
+
+### Storage Strategy
+
+**Delta Lake**: ACID transactions, upsert with predicate matching, time travel, Z-order clustering, vacuum.
+
+**Apache Iceberg**: Partition/sort optimization, MERGE INTO for upserts, snapshot isolation, file compaction with binpack.
+
+### Cost Optimization
+- Partitioning: date/entity-based, avoid over-partitioning (keep >1GB per partition)
+- File sizes: 512MB-1GB for Parquet
+- Lifecycle policies: hot (Standard) -> warm (IA) -> cold (Glacier)
+- Compute: spot instances for batch, on-demand for streaming, serverless for adhoc
+- Query optimization: partition pruning, clustering, predicate pushdown
+
+### Pipeline Example: Minimal Batch
+```python
+from batch_ingestion import BatchDataIngester
+from storage.delta_lake_manager import DeltaLakeManager
+from data_quality.expectations_suite import DataQualityFramework
+
+ingester = BatchDataIngester(config={})
+df = ingester.extract_from_database(
+    connection_string='postgresql://host:5432/db',
+    query='SELECT * FROM orders',
+    watermark_column='updated_at',
+    last_watermark=last_run_timestamp
+)
+schema = {'required_fields': ['id', 'user_id'], 'dtypes': {'id': 'int64'}}
+df = ingester.validate_and_clean(df, schema)
+
+dq = DataQualityFramework()
+dq.validate_dataframe(df, suite_name='orders_suite', data_asset_name='orders')
+
+delta_mgr = DeltaLakeManager(storage_path='s3://lake')
+delta_mgr.create_or_update_table(
+    df=df, table_name='orders',
+    partition_columns=['order_date'], mode='append'
+)
+ingester.save_dead_letter_queue('s3://lake/dlq/orders')
+```
+
+---
+
+## Data Quality Frameworks
+
+### Data Quality Dimensions
+
+| Dimension | Description | Example Check |
+|-----------|-------------|---------------|
+| **Completeness** | No missing values | `expect_column_values_to_not_be_null` |
+| **Uniqueness** | No duplicates | `expect_column_values_to_be_unique` |
+| **Validity** | Values in expected range | `expect_column_values_to_be_in_set` |
+| **Accuracy** | Data matches reality | Cross-reference validation |
+| **Consistency** | No contradictions | `expect_column_pair_values_A_to_be_greater_than_B` |
+| **Timeliness** | Data is recent | `expect_column_max_to_be_between` |
+
+### Great Expectations Patterns
+- Build expectation suites covering schema, primary keys, foreign keys, categorical values, numeric ranges, date validity, freshness, and row count sanity
+- Use checkpoints with validation actions: store results, update data docs, send Slack notifications on failure
+- Integrate into pipeline: validate before writing to production sinks
+
+### dbt Data Tests
+- Schema tests in YAML: unique, not_null, relationships, accepted_values
+- Custom tests with `dbt-expectations` and `dbt_utils`
+- Singular tests for specific business rules (e.g., orphaned records)
+- Table-level: recency, `at_least_one`, expression-based
+
+### Data Contracts
+- Define contracts with schema, quality rules, SLAs, and ownership
+- Specify PII classification and usage terms
+- Include freshness and availability SLAs
+- Use SodaCL or Great Expectations for contract enforcement
+
+### Quality Pipeline Best Practices
+- Test early (validate source data before transformations)
+- Test incrementally (add tests as you find issues)
+- Alert on failures with monitoring integration
+- Version contracts and track schema changes
+- Focus on critical columns, don't test everything
+- Test relationships across tables, not just in isolation
+
+For detailed Great Expectations suites, dbt test patterns, data contract templates, and automated quality pipeline code, see: `resources/data-quality-playbook.md`
+
+---
+
+## Data-Driven Feature Development
+
+### Overview
+Build features guided by data insights, A/B testing, and continuous measurement.
+
+### Phase 1: Data Analysis & Hypothesis
+1. **Exploratory Data Analysis**: Analyze user behavior, identify patterns, segment users, calculate baselines using analytics tools (Amplitude, Mixpanel, Segment)
+2. **Hypothesis Development**: Define success metrics, expected impact on KPIs, target segments using ICE/RICE scoring
+3. **Experiment Design**: Calculate sample size for statistical power, define control/treatment groups, plan for multiple testing corrections
+
+### Phase 2: Feature Architecture with Analytics
+4. **Feature Architecture**: Integrate feature flags (LaunchDarkly, Split.io), gradual rollout, circuit breakers
+5. **Analytics Instrumentation**: Define event schemas, funnel tracking, cohort analysis capabilities
+6. **Data Pipeline**: Real-time streaming for live metrics, batch processing for analysis, warehouse integration
+
+### Phase 3: Implementation
+7. Implement backend with feature flag checks, event tracking, performance metrics
+8. Build frontend with analytics tracking for all user interactions
+9. Integrate ML models if applicable with A/B testing between versions
+
+### Phase 4: Launch & Experimentation
+10. Validate analytics in staging; test data pipeline end-to-end
+11. Configure experiments: start with 5-10% traffic, implement kill switches
+12. Gradual rollout: internal -> beta (1-5%) -> gradual increase with anomaly monitoring
+
+### Phase 5: Analysis & Decision
+13. Statistical analysis with frequentist and Bayesian approaches, segment-level effects
+14. Business impact: actual vs expected ROI, recommendation on rollout/iteration/rollback
+15. Post-launch optimization: identify friction points, plan follow-up experiments
+
+### Configuration
+```yaml
+experiment_config:
+  min_sample_size: 10000
+  confidence_level: 0.95
+  runtime_days: 14
+  traffic_allocation: "gradual"
+feature_flags:
+  provider: "launchdarkly"
+monitoring:
+  real_time_metrics: true
+  anomaly_detection: true
+  automatic_rollback: true
+```
+
+### Success Criteria
+- 100% of user interactions tracked with proper event schema
+- Proper randomization, sufficient statistical power, no sample ratio mismatch
+- Measurable improvement in target metrics without degrading guardrail metrics
+- No degradation in p95 latency, error rates below 0.1%

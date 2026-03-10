@@ -12,12 +12,17 @@ source: community
 
 ## Use this skill when
 
-- Working on mlops engineer tasks or workflows
-- Needing guidance, best practices, or checklists for mlops engineer
+- Building ML infrastructure and automation pipelines
+- Designing ML pipeline orchestration (data ingestion through deployment)
+- Setting up experiment tracking, model registries, or feature stores
+- Implementing MLOps practices or automating model lifecycle
+- Creating DAG-based ML workflow orchestration
+- Planning production ML deployment and monitoring
 
 ## Do not use this skill when
 
-- The task is unrelated to mlops engineer
+- The task is unrelated to ML infrastructure or pipelines
+- You need ML algorithm design or model development (use ml-engineer instead)
 - You need a different domain or tool outside this scope
 
 ## Instructions
@@ -219,3 +224,50 @@ Expert MLOps engineer specializing in building scalable ML infrastructure and au
 - "Implement GitOps workflow for ML model deployment with approval gates"
 - "Build monitoring system for detecting data drift and model performance issues"
 - "Create cost-optimized training infrastructure using spot instances and auto-scaling"
+
+---
+
+## Multi-Agent ML Pipeline Orchestration
+
+For complex ML systems, orchestrate specialized roles through these phases:
+
+### Phase 1: Data & Requirements Analysis
+1. **Data Engineering**: Design data pipeline -- source audit, ingestion strategy, schema validation (Pydantic/Great Expectations), data versioning (DVC/lakeFS), incremental loading, CDC strategies, storage architecture (raw/processed/feature layers), data quality framework with lineage tracking
+2. **Feature Engineering**: Transformation specifications, feature store schema (Feast/Tecton), statistical validation, handling missing data/outliers, algorithm selection, experiment design with A/B testing methodology
+
+### Phase 2: Model Development & Training
+3. **Training Pipeline**: Modular training code, hyperparameter optimization (Optuna/Ray Tune), distributed training (Horovod/PyTorch DDP), cross-validation, ensemble strategies
+4. **Experiment Tracking**: MLflow/W&B integration, metric logging, artifact management, experiment comparison
+5. **Model Registry**: Version control and tagging, model metadata and lineage, promotion workflows (dev -> staging -> prod), rollback procedures
+6. **Code Optimization**: Production-ready refactoring, error handling, caching, memory management, comprehensive test suite
+
+### Phase 3: Production Deployment & Serving
+7. **Model Serving**: REST/gRPC APIs (FastAPI/TorchServe), batch prediction (Airflow/Kubeflow), stream processing (Kafka/Kinesis), KServe/Seldon Core
+8. **Deployment Strategies**: Blue-green for zero downtime, canary with traffic splitting, shadow deployments, A/B testing infrastructure
+9. **Kubernetes Infrastructure**: GPU scheduling, HPA/VPA/KEDA autoscaling, Istio service mesh, PVC strategies, Helm charts
+
+### Phase 4: Monitoring & Continuous Improvement
+10. **Model Monitoring**: Prediction accuracy tracking, drift detection (KS test, PSI), concept drift, feature distribution tracking, business KPI correlation
+11. **System Observability**: Prometheus metrics, Grafana dashboards, distributed tracing (Jaeger/Zipkin), log aggregation (ELK/Loki)
+12. **Alerting & Automation**: PagerDuty/Opsgenie integration, automated retraining triggers, performance degradation workflows, incident response runbooks
+13. **Cost Tracking**: Resource utilization metrics, cost allocation by model/experiment, optimization recommendations
+
+## Pipeline Design Best Practices
+
+- **Modularity**: Each stage independently testable
+- **Idempotency**: Re-running stages should be safe
+- **Observability**: Log metrics at every stage
+- **Versioning**: Track data, code, and model versions together
+- **Failure Handling**: Implement retry logic and alerting
+- **Progressive Disclosure**: Start simple (data -> train -> deploy), add validation/monitoring, then hyperparameter tuning, A/B testing, multi-model ensembles
+
+## Success Criteria
+
+- < 0.1% data quality issues in production
+- < 5% performance degradation before retraining triggers
+- 99.9% uptime for model serving
+- < 200ms p99 inference latency
+- < 1 hour from commit to production
+- < 20% infrastructure waste
+- Spot instance utilization > 60%
+- Automated rollback within 5 minutes

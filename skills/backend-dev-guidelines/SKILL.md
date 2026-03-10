@@ -337,11 +337,106 @@ Before finalizing backend work:
 
 ---
 
-## 14. Skill Status
+## 14. Architecture & API Design Expertise
 
-**Status:** Stable · Enforceable · Production-grade
-**Intended Use:** Long-lived Node.js microservices with real traffic and real risk
+Beyond Node.js/Express specifics, apply these broader backend architecture principles:
+
+### API Design Patterns
+- **RESTful APIs**: Resource modeling, HTTP methods, status codes, versioning strategies
+- **GraphQL APIs**: Schema design, resolvers, mutations, subscriptions, DataLoader patterns
+- **gRPC Services**: Protocol Buffers, streaming, service definition
+- **WebSocket/SSE**: Real-time communication, connection management, scaling
+- **Webhook patterns**: Event delivery, retry logic, signature verification, idempotency
+- **Pagination**: Offset, cursor-based, keyset pagination
+
+### Service Architecture
+- **Service boundaries**: Domain-Driven Design, bounded contexts, service decomposition
+- **Communication**: Synchronous (REST, gRPC), asynchronous (message queues, events)
+- **API Gateway**: Kong, Ambassador, AWS API Gateway -- authentication, rate limiting, routing
+- **Service mesh**: Istio, Linkerd -- traffic management, observability, security
+- **Patterns**: Saga, CQRS, Circuit Breaker, Strangler, Backend-for-Frontend (BFF)
+
+### Event-Driven Architecture
+- **Message queues**: RabbitMQ, AWS SQS, Azure Service Bus
+- **Event streaming**: Kafka, AWS Kinesis, NATS
+- **Event sourcing**: Event store, replay, snapshots, projections
+- **Dead letter queues**: Failure handling, retry strategies, poison messages
+- **Schema evolution**: Versioning, backward/forward compatibility
+
+### Security Patterns
+- **Authentication**: OAuth 2.0, OpenID Connect, JWT, mTLS, API keys
+- **Authorization**: RBAC, ABAC, policy engines
+- **Rate limiting**: Token bucket, sliding window, distributed rate limiting
+- **Input validation**: Schema validation, sanitization, allowlisting
+- **Secrets management**: Vault, AWS Secrets Manager
+
+### Resilience & Fault Tolerance
+- **Circuit breaker**: Failure detection, state management, fallback strategies
+- **Retry patterns**: Exponential backoff, jitter, retry budgets, idempotency
+- **Timeout management**: Request timeouts, connection timeouts, deadline propagation
+- **Bulkhead pattern**: Resource isolation, thread pools, connection pools
+- **Graceful degradation**: Fallback responses, cached responses, feature toggles
+- **Health checks**: Liveness, readiness, startup probes
+
+### Caching Strategies
+- **Cache patterns**: Cache-aside, read-through, write-through, write-behind
+- **Technologies**: Redis, Memcached, in-memory caching
+- **Invalidation**: TTL, event-driven invalidation, cache tags
+- **HTTP caching**: ETags, Cache-Control, conditional requests
+
+### Performance Optimization
+- **Query optimization**: N+1 prevention, batch loading, DataLoader pattern
+- **Connection pooling**: Database connections, HTTP clients
+- **Async operations**: Non-blocking I/O, parallel processing
+- **Horizontal scaling**: Stateless services, load distribution, auto-scaling
+
+### Testing Strategies (Extended)
+- **Contract testing**: Pact, consumer-driven contracts, schema validation
+- **Load testing**: Performance testing, stress testing, capacity planning
+- **Security testing**: Penetration testing, vulnerability scanning, OWASP Top 10
+- **Chaos testing**: Fault injection, resilience testing
+
 ---
 
-## When to Use
-This skill is applicable to execute the workflow or actions described in the overview.
+## 15. Feature Development Workflow
+
+For end-to-end feature delivery, follow this phased approach:
+
+### Configuration Options
+- **Methodology**: traditional | tdd | bdd | ddd
+- **Complexity**: simple (1-2 days) | medium (3-5 days) | complex (1-2 weeks) | epic (2+ weeks)
+- **Deployment**: direct | canary | feature-flag | blue-green | a-b-test
+
+### Phase 1: Discovery & Requirements
+1. Analyze feature requirements, define user stories, acceptance criteria, success metrics
+2. Design technical architecture: service boundaries, API contracts, data models
+3. Assess security implications and risks
+
+### Phase 2: Implementation
+4. Build backend services: APIs, business logic, data layer, resilience patterns, feature flags
+5. Build frontend components with API integration
+6. Build data pipelines and analytics events
+
+### Phase 3: Testing & QA
+7. Create comprehensive test suite (unit, integration, E2E, performance) -- min 80% coverage
+8. Security validation: OWASP checks, dependency scanning, compliance
+9. Performance optimization: profiling, caching, load times
+
+### Phase 4: Deployment & Monitoring
+10. CI/CD pipeline with automated tests, feature flags for gradual rollout, rollback procedures
+11. Observability: distributed tracing, custom metrics, error tracking, dashboards, SLOs/SLIs
+12. Documentation: API docs, user guides, runbooks, architecture diagrams
+
+### Rollback Strategy
+1. Immediate feature flag disable (< 1 minute)
+2. Blue-green traffic switch (< 5 minutes)
+3. Full deployment rollback via CI/CD (< 15 minutes)
+4. Database migration rollback if needed
+5. Incident post-mortem and fixes before re-deployment
+
+---
+
+## 16. Skill Status
+
+**Status:** Stable · Enforceable · Production-grade
+**Intended Use:** Long-lived backend services with real traffic and real risk

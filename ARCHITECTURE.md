@@ -8,167 +8,250 @@
 
 Bilge Development Kit is a modular system consisting of:
 
-- **22 Specialist Agents** - Role-based AI personas
-- **38 Skills** - Domain-specific knowledge modules
+- **23 Specialist Agents** - Role-based AI personas
+- **95 Skills** - Domain-specific knowledge modules
 - **14 Workflows** - Slash command procedures
+- **4 Scripts** - Automation and validation tools
 
 ---
 
-## 🏗️ Directory Structure
+## Directory Structure
 
 ```plaintext
 .agent/
 ├── ARCHITECTURE.md          # This file
-├── agents/                  # 20 Specialist Agents
-├── skills/                  # 36 Skills
-├── workflows/               # 11 Slash Commands
-├── rules/                   # Global Rules
-└── scripts/                 # Master Validation Scripts
+├── mcp_config.json.example  # MCP configuration example
+├── .gitignore               # Git ignore rules
+├── .shared/                 # Shared assets across skills
+│   └── ui-ux-pro-max/      # Shared UI/UX resources
+├── agents/                  # 23 Specialist Agents
+├── skills/                  # 95 Skills + doc.md guide
+├── workflows/               # 14 Slash Commands
+├── rules/                   # Global Rules (CLAUDE.md, GEMINI.md)
+└── scripts/                 # 4 Automation Scripts
 ```
 
 ---
 
-## Agents (22)
+## Agents (23)
 
 Specialist AI personas for different domains.
 
-| Agent                    | Focus                      | Skills Used                                              |
-| ------------------------ | -------------------------- | -------------------------------------------------------- |
-| `orchestrator`           | Multi-agent coordination   | parallel-agents, behavioral-modes                        |
-| `project-planner`        | Discovery, task planning   | brainstorming, plan-writing, architecture                |
-| `frontend-specialist`    | Web UI/UX                  | frontend-design, react-best-practices, tailwind-patterns |
-| `backend-specialist`     | API, business logic        | api-patterns, nodejs-best-practices, database-design     |
-| `database-architect`     | Schema, SQL                | database-design, prisma-expert                           |
-| `mobile-developer`       | iOS, Android, RN           | mobile-design                                            |
-| `game-developer`         | Game logic, mechanics      | game-development                                         |
-| `ai-engineer`            | AI/ML, LLM, RAG, agents   | api-patterns, database-design, architecture              |
-| `data-engineer`          | ETL, pipelines, analytics  | database-design, python-patterns                         |
-| `devops-engineer`        | CI/CD, Docker              | deployment-procedures, docker-expert                     |
-| `security-auditor`       | Security compliance        | vulnerability-scanner, red-team-tactics                  |
-| `penetration-tester`     | Offensive security         | red-team-tactics                                         |
-| `test-engineer`          | Testing strategies         | testing-patterns, tdd-workflow, webapp-testing           |
-| `debugger`               | Root cause analysis        | systematic-debugging                                     |
-| `performance-optimizer`  | Speed, Web Vitals          | performance-profiling                                    |
-| `seo-specialist`         | Ranking, visibility        | seo-fundamentals, geo-fundamentals                       |
-| `documentation-writer`   | Manuals, docs              | documentation-templates                                  |
-| `product-manager`        | Requirements, user stories | plan-writing, brainstorming                              |
-| `product-owner`          | Strategy, backlog, MVP     | plan-writing, brainstorming                              |
-| `qa-automation-engineer` | E2E testing, CI pipelines  | webapp-testing, testing-patterns                         |
-| `code-archaeologist`     | Legacy code, refactoring   | clean-code, code-review-checklist                        |
-| `explorer-agent`         | Codebase analysis          | -                                                        |
+| Agent                    | Focus                              |
+| ------------------------ | ---------------------------------- |
+| `orchestrator`           | Multi-agent coordination           |
+| `project-planner`        | Discovery, task planning           |
+| `frontend-specialist`    | Web UI/UX                          |
+| `backend-specialist`     | API, business logic                |
+| `database-architect`     | Schema, SQL, migrations            |
+| `mobile-developer`       | React Native, Flutter              |
+| `game-developer`         | Game logic, engines, mechanics     |
+| `ai-engineer`            | AI/ML, LLM, RAG, agents           |
+| `data-engineer`          | ETL, pipelines, analytics          |
+| `devops-engineer`        | CI/CD, Docker, production ops      |
+| `security-auditor`       | OWASP, supply chain, zero trust    |
+| `penetration-tester`     | Offensive security, exploitation   |
+| `test-engineer`          | Testing, TDD, coverage             |
+| `qa-automation-engineer` | E2E testing, Playwright, CI        |
+| `debugger`               | Root cause analysis, crash investigation |
+| `performance-optimizer`  | Speed, Web Vitals, profiling       |
+| `seo-specialist`         | Ranking, visibility, SEO           |
+| `documentation-writer`   | Technical docs, manuals            |
+| `product-manager`        | Requirements, user stories         |
+| `product-owner`          | Strategy, backlog, MVP             |
+| `api-designer`           | REST, GraphQL, gRPC API design     |
+| `code-archaeologist`     | Legacy code, refactoring           |
+| `explorer-agent`         | Codebase discovery, deep analysis  |
 
 ---
 
-## 🧩 Skills (36)
+## Skills (95)
 
-Modular knowledge domains that agents can load on-demand. based on task context.
+Modular knowledge domains that agents can load on-demand based on task context.
 
-### Frontend & UI
+### AI & LLM
 
-| Skill                   | Description                                                           |
-| ----------------------- | --------------------------------------------------------------------- |
-| `react-best-practices`  | React & Next.js performance optimization (Vercel - 57 rules)          |
-| `web-design-guidelines` | Web UI audit - 100+ rules for accessibility, UX, performance (Vercel) |
-| `tailwind-patterns`     | Tailwind CSS v4 utilities                                             |
-| `frontend-design`       | UI/UX patterns, design systems                                        |
-| `ui-ux-pro-max`         | 50 styles, 21 palettes, 50 fonts                                      |
+| Skill                              | Description                                      |
+| ---------------------------------- | ------------------------------------------------ |
+| `ai-engineer`                      | Production-ready LLM apps, RAG systems           |
+| `ai-agents-architect`              | Autonomous AI agent design, tool use, memory      |
+| `ai-product`                       | AI-powered product patterns, LLM integration     |
+| `ai-wrapper-product`               | Building products wrapping AI APIs               |
+| `agent-evaluation`                 | LLM agent testing and benchmarking               |
+| `agent-manager-skill`              | Multi-agent tmux session management              |
+| `agent-memory-mcp`                 | Hybrid memory system for AI agents               |
+| `agent-memory-systems`             | Agent memory architecture (short/long-term)      |
+| `agent-tool-builder`               | Tools for AI agent interaction                   |
+| `agents-v2-py`                     | Azure AI Foundry container-based agents          |
+| `computer-use-agents`              | AI agents that interact with computer screens    |
+| `computer-vision-expert`           | YOLO, SAM, Vision Language Models                |
+| `deep-research`                    | Autonomous multi-step research with Gemini       |
+| `intelligent-routing`              | Automatic agent selection and task routing        |
+| `langchain-architecture`           | LangChain/LangGraph LLM app design              |
+| `langfuse`                         | LLM observability, tracing, evaluation           |
+| `langgraph`                        | Stateful multi-actor AI applications             |
+| `llm-app-patterns`                 | Production RAG, agent, and AI assistant patterns |
+| `llm-application-dev-prompt-optimize` | Advanced prompt engineering techniques        |
+| `llm-evaluation`                   | LLM evaluation strategies and metrics            |
+| `rag-engineer`                     | RAG systems, embeddings, vector databases        |
+| `rag-implementation`               | RAG with vector databases and semantic search    |
+| `research-engineer`                | Academic research, formal verification           |
+| `tool-design`                      | Building tools for agent use                     |
 
 ### Backend & API
 
-| Skill                   | Description                    |
-| ----------------------- | ------------------------------ |
-| `api-patterns`          | REST, GraphQL, tRPC            |
-| `nestjs-expert`         | NestJS modules, DI, decorators |
-| `nodejs-best-practices` | Node.js async, modules         |
-| `python-patterns`       | Python standards, FastAPI      |
+| Skill                              | Description                                      |
+| ---------------------------------- | ------------------------------------------------ |
+| `api-patterns`                     | REST, GraphQL, tRPC design principles            |
+| `api-design-principles`            | Scalable, maintainable API design                |
+| `api-security-best-practices`      | API auth, validation, rate limiting              |
+| `api-testing-observability-api-mock` | Realistic API mocking for dev/test             |
+| `backend-dev-guidelines`           | Node.js + Express + TypeScript standards         |
+| `fastapi-pro`                      | High-performance async APIs with FastAPI         |
+| `fastapi-templates`                | Production-ready FastAPI project scaffolding     |
+| `nodejs-best-practices`            | Node.js async, error handling, security          |
+
+### Frontend & UI
+
+| Skill                   | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| `frontend-design`       | UI/UX patterns, design systems, component architecture      |
+| `react-best-practices`  | React/Next.js performance, hooks, state management          |
+| `tailwind-patterns`     | Tailwind CSS utilities, responsive design, themes           |
+| `web-design-guidelines` | Responsive design, accessibility (WCAG), web performance    |
 
 ### Database
 
-| Skill             | Description                 |
-| ----------------- | --------------------------- |
-| `database-design` | Schema design, optimization |
-| `prisma-expert`   | Prisma ORM, migrations      |
+| Skill             | Description                               |
+| ----------------- | ----------------------------------------- |
+| `database-design` | Schema design, indexing, migrations       |
 
-### TypeScript/JavaScript
+### Python
 
-| Skill               | Description                         |
-| ------------------- | ----------------------------------- |
-| `typescript-expert` | Type-level programming, performance |
+| Skill                    | Description                                 |
+| ------------------------ | ------------------------------------------- |
+| `python-patterns`        | Python standards, async, type hints         |
+| `python-packaging`       | Package distribution, PyPI publishing       |
+| `python-testing-patterns`| pytest, fixtures, mocking, TDD             |
 
-### Cloud & Infrastructure
+### Data & ML
 
-| Skill                   | Description               |
-| ----------------------- | ------------------------- |
-| `docker-expert`         | Containerization, Compose |
-| `deployment-procedures` | CI/CD, deploy workflows   |
-| `server-management`     | Infrastructure management |
+| Skill               | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `data-engineer`      | Data pipelines, Spark, dbt, Airflow          |
+| `data-scientist`     | Advanced analytics, machine learning         |
+| `ml-engineer`        | Production ML with PyTorch, TensorFlow       |
+| `mlops-engineer`     | ML pipelines, experiment tracking            |
+| `airflow-dag-patterns` | Apache Airflow DAGs and best practices     |
+
+### DevOps & Infrastructure
+
+| Skill                              | Description                              |
+| ---------------------------------- | ---------------------------------------- |
+| `deployment-procedures`            | CI/CD, GitOps, rollback strategies       |
+| `deployment-validation-config-validate` | Configuration validation and testing |
+| `devops-troubleshooter`            | Rapid incident troubleshooting           |
+| `server-management`               | Process management, monitoring, scaling  |
+| `grafana-dashboards`              | Grafana dashboard creation               |
+| `monitoring-observability`        | Logging, tracing, alerting, SLI/SLO      |
+| `prometheus-configuration`        | Prometheus metric collection setup       |
+| `secrets-management`              | Vault, AWS Secrets Manager, CI/CD secrets|
+| `hugging-face-cli`                | Hugging Face Hub CLI operations          |
 
 ### Testing & Quality
 
-| Skill                   | Description              |
-| ----------------------- | ------------------------ |
-| `testing-patterns`      | Jest, Vitest, strategies |
-| `webapp-testing`        | E2E, Playwright          |
-| `tdd-workflow`          | Test-driven development  |
-| `code-review-checklist` | Code review standards    |
-| `lint-and-validate`     | Linting, validation      |
+| Skill                          | Description                            |
+| ------------------------------ | -------------------------------------- |
+| `testing-patterns`             | Unit, integration, mocking strategies  |
+| `webapp-testing`               | Playwright, Cypress, visual regression |
+| `tdd-workflow`                 | Test-Driven Development cycle          |
+| `code-review-checklist`        | Comprehensive code review standards    |
+| `code-reviewer`                | AI-powered code review                 |
+| `lint-and-validate`            | Linting, static analysis, formatting   |
+| `unit-testing-test-generate`   | Comprehensive unit test generation     |
+| `verification-before-completion` | Verify before claiming work done     |
 
 ### Security
 
-| Skill                   | Description              |
-| ----------------------- | ------------------------ |
-| `vulnerability-scanner` | Security auditing, OWASP |
-| `red-team-tactics`      | Offensive security       |
+| Skill                   | Description                             |
+| ----------------------- | --------------------------------------- |
+| `vulnerability-scanner` | SAST/DAST, dependency auditing, CVE     |
+| `red-team-tactics`      | Offensive security, penetration testing |
 
 ### Architecture & Planning
 
-| Skill           | Description                |
-| --------------- | -------------------------- |
-| `app-builder`   | Full-stack app scaffolding |
-| `architecture`  | System design patterns     |
-| `plan-writing`  | Task planning, breakdown   |
-| `brainstorming` | Socratic questioning       |
+| Skill                          | Description                              |
+| ------------------------------ | ---------------------------------------- |
+| `app-builder`                  | Full-stack scaffolding, monorepo setup   |
+| `architecture`                 | System design, DDD, clean architecture   |
+| `architecture-decision-records`| ADR documentation                        |
+| `plan-writing`                 | Structured task planning, breakdowns     |
+| `brainstorming`                | Socratic questioning, design review      |
+| `project-development`          | LLM project structure, pipeline design   |
 
-### Mobile
+### Code Quality & Refactoring
 
-| Skill           | Description           |
-| --------------- | --------------------- |
-| `mobile-design` | Mobile UI/UX patterns |
+| Skill                              | Description                               |
+| ---------------------------------- | ----------------------------------------- |
+| `clean-code`                       | Clean Code principles (Robert C. Martin)  |
+| `refactoring-patterns`             | Extract method, strategy, strangler fig   |
+| `code-refactoring-refactor-clean`  | SOLID design patterns refactoring         |
+| `code-refactoring-tech-debt`       | Technical debt identification, prioritization |
+| `code-refactoring-context-restore` | Code refactoring context restore          |
+| `codebase-cleanup-deps-audit`     | Dependency security, license compliance   |
 
-### Game Development
+### Documentation
 
-| Skill              | Description           |
-| ------------------ | --------------------- |
-| `game-development` | Game logic, mechanics |
+| Skill                              | Description                               |
+| ---------------------------------- | ----------------------------------------- |
+| `documentation-templates`          | README, API docs, code comment formats    |
+| `code-documentation-code-explain`  | Code explanation with diagrams            |
+| `code-documentation-doc-generate`  | Auto-generate docs from code              |
+| `readme`                           | README.md creation and updates            |
+| `writing-skills`                   | Creating and editing BDK skills           |
+
+### Mobile & Game
+
+| Skill              | Description                               |
+| ------------------ | ----------------------------------------- |
+| `mobile-design`    | Mobile UI/UX, iOS HIG, Material Design    |
+| `game-development` | Game architecture, engines, mechanics     |
 
 ### SEO & Growth
 
-| Skill              | Description                   |
-| ------------------ | ----------------------------- |
-| `seo-fundamentals` | SEO, E-E-A-T, Core Web Vitals |
-| `geo-fundamentals` | GenAI optimization            |
+| Skill              | Description                           |
+| ------------------ | ------------------------------------- |
+| `seo-fundamentals` | SEO, meta tags, structured data       |
+| `geo-fundamentals` | Generative Engine Optimization (GEO)  |
 
 ### Shell/CLI
 
-| Skill                | Description               |
-| -------------------- | ------------------------- |
-| `bash-linux`         | Linux commands, scripting |
-| `powershell-windows` | Windows PowerShell        |
+| Skill                  | Description                    |
+| ---------------------- | ------------------------------ |
+| `bash-linux`           | Linux commands, scripting      |
+| `powershell-windows`   | Windows PowerShell patterns    |
+| `linux-shell-scripting`| Production shell scripts       |
 
-### Other
+### Rust
 
-| Skill                     | Description               |
-| ------------------------- | ------------------------- |
-| `clean-code`              | Coding standards (Global) |
-| `behavioral-modes`        | Agent personas            |
-| `parallel-agents`         | Multi-agent patterns      |
-| `mcp-builder`             | Model Context Protocol    |
-| `documentation-templates` | Doc formats               |
-| `i18n-localization`       | Internationalization      |
-| `performance-profiling`   | Web Vitals, optimization  |
-| `systematic-debugging`      | Troubleshooting           |
-| `monitoring-observability`  | Logging, metrics, tracing |
-| `caching-patterns`          | Cache strategies, Redis   |
+| Skill      | Description                                 |
+| ---------- | ------------------------------------------- |
+| `rust-pro` | Ownership, lifetimes, async, concurrency    |
+
+### Caching & Performance
+
+| Skill                   | Description                          |
+| ----------------------- | ------------------------------------ |
+| `caching-patterns`      | Browser, CDN, Redis cache strategies |
+| `performance-profiling` | Measurement, analysis, optimization  |
+
+### Agent Behavior
+
+| Skill              | Description                       |
+| ------------------ | --------------------------------- |
+| `behavioral-modes` | Agent personas and modes          |
+| `parallel-agents`  | Multi-agent orchestration         |
+| `mcp-builder`      | Model Context Protocol servers    |
 
 ---
 
@@ -195,7 +278,7 @@ Slash command procedures. Invoke with `/command`.
 
 ---
 
-## 🎯 Skill Loading Protocol
+## Skill Loading Protocol
 
 ```plaintext
 User Request → Skill Description Match → Load SKILL.md
@@ -215,25 +298,18 @@ skill-name/
 └── assets/            # (Optional) Images, logos
 ```
 
-### Enhanced Skills (with scripts/references)
-
-| Skill               | Files | Coverage                            |
-| ------------------- | ----- | ----------------------------------- |
-| `ui-ux-pro-max`     | 27    | 50 styles, 21 palettes, 50 fonts    |
-| `app-builder`       | 20    | Full-stack scaffolding              |
-
 ---
 
-## � Scripts (2)
+## Scripts (4)
 
-Master validation scripts that orchestrate skill-level scripts.
+Automation and validation scripts.
 
-### Master Scripts
-
-| Script          | Purpose                                 | When to Use              |
-| --------------- | --------------------------------------- | ------------------------ |
-| `checklist.py`  | Priority-based validation (Core checks) | Development, pre-commit  |
-| `verify_all.py` | Comprehensive verification (All checks) | Pre-deployment, releases |
+| Script               | Purpose                                      | When to Use               |
+| -------------------- | -------------------------------------------- | ------------------------- |
+| `checklist.py`       | Priority-based validation (core checks)      | Development, pre-commit   |
+| `verify_all.py`      | Comprehensive verification (all checks)      | Pre-deployment, releases  |
+| `auto_preview.py`    | Dev server management (start/stop/status)    | Local preview, testing    |
+| `session_manager.py` | Project state analysis, tech stack detection | Session info, diagnostics |
 
 ### Usage
 
@@ -243,6 +319,15 @@ python .agent/scripts/checklist.py .
 
 # Full verification before deployment
 python .agent/scripts/verify_all.py . --url http://localhost:3000
+
+# Manage local dev server
+python .agent/scripts/auto_preview.py start [port]
+python .agent/scripts/auto_preview.py stop
+python .agent/scripts/auto_preview.py status
+
+# Analyze project state
+python .agent/scripts/session_manager.py status [path]
+python .agent/scripts/session_manager.py info [path]
 ```
 
 ### What They Check
@@ -265,33 +350,32 @@ python .agent/scripts/verify_all.py . --url http://localhost:3000
 - Mobile Audit
 - i18n Check
 
-For details, see [scripts/README.md](scripts/README.md)
+---
+
+## Statistics
+
+| Metric              | Value  |
+| ------------------- | ------ |
+| **Total Agents**    | 23     |
+| **Total Skills**    | 95     |
+| **Total Workflows** | 14     |
+| **Total Scripts**   | 4      |
 
 ---
 
-## 📊 Statistics
-
-| Metric              | Value                         |
-| ------------------- | ----------------------------- |
-| **Total Agents**    | 22                            |
-| **Total Skills**    | 38                            |
-| **Total Workflows** | 14                            |
-| **Total Scripts**   | 2 (master) + 18 (skill-level) |
-| **Coverage**        | ~95% web/mobile/AI development|
-
----
-
-## 🔗 Quick Reference
+## Quick Reference
 
 | Need     | Agent                 | Skills                                |
 | -------- | --------------------- | ------------------------------------- |
 | Web App  | `frontend-specialist` | react-best-practices, frontend-design |
 | API      | `backend-specialist`  | api-patterns, nodejs-best-practices   |
 | Mobile   | `mobile-developer`    | mobile-design                         |
-| Database | `database-architect`  | database-design, prisma-expert        |
+| Database | `database-architect`  | database-design                       |
 | Security | `security-auditor`    | vulnerability-scanner                 |
 | Testing  | `test-engineer`       | testing-patterns, webapp-testing      |
 | Debug    | `debugger`            | systematic-debugging                  |
 | Plan     | `project-planner`     | brainstorming, plan-writing           |
-| AI/LLM   | `ai-engineer`         | api-patterns, architecture            |
-| Data     | `data-engineer`       | database-design, python-patterns      |
+| AI/LLM   | `ai-engineer`         | ai-engineer, rag-engineer             |
+| Data     | `data-engineer`       | data-engineer, python-patterns        |
+| DevOps   | `devops-engineer`     | deployment-procedures                 |
+| Pentest  | `penetration-tester`  | red-team-tactics                      |

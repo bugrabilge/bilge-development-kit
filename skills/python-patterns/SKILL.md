@@ -1,6 +1,6 @@
 ---
 name: python-patterns
-description: "Python development principles and decision-making. Framework selection, async patterns, type hints, project structure. Teaches thinking, not copying."
+description: "Python development principles, project scaffolding, performance optimization, and modern tooling. Framework selection, async patterns, type hints, profiling, and production-ready project structures."
 allowed-tools: Read, Write, Edit, Glob, Grep
 risk: unknown
 source: community
@@ -445,3 +445,282 @@ Before implementing:
 ---
 
 > **Remember**: Python patterns are about decision-making for YOUR specific context. Don't copy code—think about what serves your application best.
+
+---
+
+## 12. Modern Python Tooling (2025)
+
+### Package Management with uv
+
+```bash
+# Create new project
+uv init <project-name>
+cd <project-name>
+uv venv
+source .venv/bin/activate
+
+# Add dependencies
+uv add fastapi uvicorn pydantic
+uv add --dev pytest ruff mypy
+uv sync
+```
+
+### Code Quality with ruff
+
+```toml
+# pyproject.toml
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+```
+
+ruff replaces black, isort, and flake8 in a single fast tool.
+
+### Static Type Checking
+
+| Tool | Strengths |
+|------|-----------|
+| **mypy** | Most mature, widest adoption |
+| **pyright** | Fastest, best VS Code integration |
+| **pytype** | Google's type checker, infers types |
+
+---
+
+## 13. Project Scaffolding Templates
+
+### FastAPI Project Structure
+
+```
+fastapi-project/
+├── pyproject.toml
+├── .env.example
+├── src/
+│   └── project_name/
+│       ├── __init__.py
+│       ├── main.py
+│       ├── config.py
+│       ├── api/
+│       │   ├── deps.py
+│       │   └── v1/
+│       │       ├── endpoints/
+│       │       │   ├── users.py
+│       │       │   └── health.py
+│       │       └── router.py
+│       ├── core/
+│       │   ├── security.py
+│       │   └── database.py
+│       ├── models/
+│       ├── schemas/
+│       └── services/
+└── tests/
+    ├── conftest.py
+    └── api/
+```
+
+### Django Project Structure
+
+```bash
+uv add django django-environ django-debug-toolbar
+django-admin startproject config .
+python manage.py startapp core
+```
+
+### Python Library Structure
+
+```
+library-name/
+├── pyproject.toml        # Use hatchling as build backend
+├── LICENSE
+├── src/
+│   └── library_name/
+│       ├── __init__.py
+│       ├── py.typed       # PEP 561 marker for typed package
+│       └── core.py
+└── tests/
+```
+
+### CLI Tool Structure
+
+```python
+# pyproject.toml: [project.scripts] cli-name = "project_name.cli:main"
+import typer
+from rich.console import Console
+
+app = typer.Typer()
+console = Console()
+
+@app.command()
+def hello(name: str = typer.Option(..., "--name", "-n")):
+    console.print(f"[bold green]Hello {name}![/bold green]")
+
+def main():
+    app()
+```
+
+### Standard Makefile
+
+```makefile
+.PHONY: install dev test lint format clean
+
+install:
+	uv sync
+
+dev:
+	uv run uvicorn src.project_name.main:app --reload
+
+test:
+	uv run pytest -v
+
+lint:
+	uv run ruff check .
+
+format:
+	uv run ruff format .
+```
+
+---
+
+## 14. Performance Optimization
+
+### Profiling Tools
+
+| Tool | Purpose | When to Use |
+|------|---------|------------|
+| **cProfile** | CPU profiling | Find slow functions |
+| **py-spy** | Sampling profiler | Profile production without overhead |
+| **memory_profiler** | Memory usage | Find memory leaks |
+| **pytest-benchmark** | Micro-benchmarks | Compare implementations |
+| **line_profiler** | Line-by-line timing | Optimize hot loops |
+| **scalene** | CPU + memory + GPU | Comprehensive profiling |
+
+### CPU Optimization Strategies
+
+| Strategy | When to Apply |
+|----------|--------------|
+| **Algorithm optimization** | Always check Big-O first |
+| **Built-in functions** | Use `sum()`, `map()`, `filter()` over manual loops |
+| **List comprehensions** | 10-30% faster than equivalent for-loops |
+| **Generator expressions** | Large datasets, memory-constrained |
+| **`functools.lru_cache`** | Repeated function calls with same args |
+| **`__slots__`** | Many instances of a class, reduce memory |
+| **NumPy vectorization** | Numerical computations, avoid Python loops |
+
+### Memory Optimization
+
+| Technique | Impact |
+|-----------|--------|
+| **Generators over lists** | Process items one at a time, constant memory |
+| **`__slots__`** | 40-50% memory reduction per instance |
+| **`array` module** | Typed arrays for homogeneous numeric data |
+| **Weak references** | Allow garbage collection of cached objects |
+| **Chunked processing** | Process large files/datasets in batches |
+
+### Concurrency Selection
+
+```
+I/O-bound (waiting for external):
+├── asyncio          → Best for many concurrent I/O operations
+├── threading        → Simple I/O parallelism, GIL-limited
+└── aiohttp/httpx    → Async HTTP clients
+
+CPU-bound (computing):
+├── multiprocessing      → True parallelism, separate processes
+├── concurrent.futures   → High-level pool interface
+└── ProcessPoolExecutor  → Map-reduce style CPU work
+```
+
+### Database Query Optimization
+
+| Technique | Framework |
+|-----------|-----------|
+| **`select_related()`** | Django - follow FK in single query |
+| **`prefetch_related()`** | Django - batch M2M queries |
+| **Eager loading** | SQLAlchemy - `joinedload()`, `subqueryload()` |
+| **`.only()` / `.defer()`** | Load only needed columns |
+| **Query caching** | Redis/Memcached for repeated queries |
+| **Connection pooling** | SQLAlchemy pool, asyncpg pool |
+
+### Caching Strategies
+
+```python
+from functools import lru_cache
+import redis
+
+# In-memory caching (same process)
+@lru_cache(maxsize=1024)
+def expensive_computation(key: str) -> dict:
+    ...
+
+# External caching (shared across processes)
+cache = redis.Redis()
+def get_data(key: str) -> dict:
+    cached = cache.get(key)
+    if cached:
+        return json.loads(cached)
+    result = compute(key)
+    cache.setex(key, 3600, json.dumps(result))
+    return result
+```
+
+---
+
+## 15. Python 3.12+ Features
+
+### Key Features to Leverage
+
+| Feature | Version | Benefit |
+|---------|---------|---------|
+| **Improved error messages** | 3.12+ | More helpful tracebacks |
+| **Pattern matching** | 3.10+ | Structural pattern matching with `match`/`case` |
+| **Union syntax `X \| Y`** | 3.10+ | Cleaner type hints |
+| **`tomllib`** | 3.11+ | Built-in TOML parsing |
+| **Exception groups** | 3.11+ | Handle multiple exceptions |
+| **Perf improvements** | 3.12+ | Faster interpreter, specializing adaptive |
+
+### Advanced Patterns
+
+| Pattern | Use Case |
+|---------|----------|
+| **Descriptors** | Reusable property-like behavior |
+| **Metaclasses** | Class creation customization |
+| **Protocol typing** | Structural subtyping (duck typing with types) |
+| **Dataclasses** | Simple value objects with less boilerplate |
+| **Context managers** | Resource lifecycle management |
+| **Decorators** | Cross-cutting concerns (logging, auth, caching) |
+| **Plugin architectures** | `importlib` + entry points for extensibility |
+
+---
+
+## 16. Production Deployment
+
+### Docker Best Practices
+
+```dockerfile
+# Multi-stage build
+FROM python:3.12-slim AS builder
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+RUN pip install uv && uv sync --frozen --no-dev
+
+FROM python:3.12-slim AS runtime
+WORKDIR /app
+COPY --from=builder /app/.venv /app/.venv
+COPY src/ ./src/
+ENV PATH="/app/.venv/bin:$PATH"
+USER nobody
+CMD ["uvicorn", "src.project_name.main:app", "--host", "0.0.0.0"]
+```
+
+### Production Checklist
+
+- [ ] Use multi-stage Docker builds
+- [ ] Run as non-root user
+- [ ] Pin all dependency versions (lock file)
+- [ ] Configure structured logging
+- [ ] Set up health check endpoints
+- [ ] Configure environment-based settings (pydantic-settings)
+- [ ] Enable monitoring and APM
+- [ ] Set appropriate resource limits

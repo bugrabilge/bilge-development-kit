@@ -178,3 +178,94 @@ Master code reviewer focused on ensuring code quality, security, performance, an
 - "Analyze this caching strategy for race conditions and data consistency"
 - "Review this CI/CD pipeline for security and deployment best practices"
 - "Assess this error handling implementation for observability and debugging"
+
+---
+
+## AI-Powered Code Review Automation
+
+### Automated Code Review Workflow
+
+#### Initial Triage
+1. Parse diff to determine modified files and affected components
+2. Match file types to optimal static analysis tools
+3. Scale analysis based on PR size (superficial >1000 lines, deep <200 lines)
+4. Classify change type: feature, bug fix, refactoring, or breaking change
+
+#### Multi-Tool Static Analysis (Execute in Parallel)
+- **CodeQL**: Deep vulnerability analysis (SQL injection, XSS, auth bypasses)
+- **SonarQube**: Code smells, complexity, duplication, maintainability
+- **Semgrep**: Organization-specific rules and security policies
+- **Snyk/Dependabot**: Supply chain security
+- **GitGuardian/TruffleHog**: Secret detection
+
+#### Model Selection for AI Review
+- **Fast reviews (<200 lines)**: GPT-4o-mini or Claude Haiku
+- **Deep reasoning**: Claude Sonnet or GPT-5 (200K+ tokens)
+- **Code generation**: GitHub Copilot or Qodo
+- **Multi-language**: Qodo or CodeAnt AI (30+ languages)
+
+#### Review Routing Strategy
+- PRs >50 files or >1000 lines: Require human review
+- Security-sensitive changes: Use high-capability models with security-focused prompts
+- Test coverage gaps >20%: Route to test-generation tooling
+- Standard changes: Use fast, cost-effective models
+
+### OWASP Top 10 Quick Reference
+1. **A01 - Broken Access Control**: Missing authorization, IDOR
+2. **A02 - Cryptographic Failures**: Weak hashing, insecure RNG
+3. **A03 - Injection**: SQL, NoSQL, command injection via taint analysis
+4. **A04 - Insecure Design**: Missing threat modeling
+5. **A05 - Security Misconfiguration**: Default credentials
+6. **A06 - Vulnerable Components**: Snyk/Dependabot for CVEs
+7. **A07 - Authentication Failures**: Weak session management
+8. **A08 - Data Integrity Failures**: Unsigned JWTs
+9. **A09 - Logging Failures**: Missing audit logs
+10. **A10 - SSRF**: Unvalidated user-controlled URLs
+
+### Scalability Red Flags
+- N+1 Queries, Missing Indexes, Synchronous External Calls
+- In-Memory State, Unbounded Collections, Missing Pagination
+- No Connection Pooling, No Rate Limiting
+
+### Structured Review Comment Format
+```typescript
+interface ReviewComment {
+  path: string; line: number;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
+  category: 'Security' | 'Performance' | 'Bug' | 'Maintainability';
+  title: string; description: string;
+  codeExample?: string; references?: string[];
+  autoFixable: boolean; cwe?: string; cvss?: number;
+  effort: 'trivial' | 'easy' | 'medium' | 'hard';
+}
+```
+
+### CI/CD Integration Example (GitHub Actions)
+```yaml
+name: AI Code Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static Analysis
+        run: |
+          sonar-scanner -Dsonar.pullrequest.key=${{ github.event.number }}
+          semgrep scan --config=auto --sarif --output=semgrep.sarif
+      - name: AI-Enhanced Review
+        run: |
+          python scripts/ai_review.py \
+            --pr-number ${{ github.event.number }} \
+            --static-analysis-results codeql.sarif,semgrep.sarif
+      - name: Quality Gate
+        run: |
+          CRITICAL=$(jq '[.[] | select(.severity == "CRITICAL")] | length' review-comments.json)
+          if [ $CRITICAL -gt 0 ]; then
+            echo "Found $CRITICAL critical issues"
+            exit 1
+          fi
+```

@@ -1,6 +1,6 @@
 ---
 name: llm-app-patterns
-description: "Production-ready patterns for building LLM applications. Covers RAG pipelines, agent architectures, prompt IDEs, and LLMOps monitoring. Use when designing AI applications, implementing RAG, buildin..."
+description: "Production-ready patterns for building LLM applications. Covers RAG pipelines, agent architectures, AI assistant design, prompt management, LLMOps monitoring, conversational interfaces, and context management."
 risk: unknown
 source: community
 ---
@@ -751,6 +751,85 @@ llm_client = LLMWithFallback(
 | **Function Calling** | Structured tools | Low        | Low       |
 | **Plan-Execute**     | Complex tasks    | High       | High      |
 | **Multi-Agent**      | Research tasks   | Very High  | Very High |
+
+---
+
+---
+
+## 6. AI Assistant & Conversational Interface Design
+
+### Conversational Architecture
+
+| Component | Purpose |
+|-----------|---------|
+| **NLU Layer** | Intent recognition, entity extraction, sentiment analysis |
+| **Dialog Manager** | Conversation flow, state tracking, context switching |
+| **Response Generator** | Template-based, retrieval-based, or generative responses |
+| **Memory/Context** | Short-term (session), long-term (user profile), episodic |
+| **Integration Layer** | API calls, database queries, tool execution |
+
+### Context Management Strategies
+
+| Strategy | When to Use |
+|----------|------------|
+| **Sliding window** | Simple chat, limited context needed |
+| **Summary memory** | Long conversations, preserve key facts |
+| **Entity memory** | Track people, places, facts across turns |
+| **Vector memory** | Semantic retrieval of relevant past interactions |
+| **Hybrid** | Production assistants needing comprehensive context |
+
+### Multi-Turn Conversation Patterns
+
+```python
+class ConversationManager:
+    """
+    Manage multi-turn conversations with context tracking
+    """
+    def __init__(self, llm, memory, tools=None):
+        self.llm = llm
+        self.memory = memory
+        self.tools = tools or []
+
+    async def process_turn(self, user_input: str, session_id: str) -> str:
+        # Load context
+        context = self.memory.load(session_id)
+
+        # Classify intent
+        intent = await self._classify_intent(user_input, context)
+
+        # Route to appropriate handler
+        if intent.requires_tool:
+            result = await self._execute_tool(intent.tool, intent.params)
+            response = await self._generate_with_result(user_input, result, context)
+        else:
+            response = await self._generate_response(user_input, context)
+
+        # Save context
+        self.memory.save(session_id, user_input, response)
+        return response
+```
+
+### Assistant Safety & Guardrails
+
+| Guardrail | Implementation |
+|-----------|---------------|
+| **Input validation** | Filter harmful/injection prompts before processing |
+| **Output filtering** | Check responses for PII, harmful content, hallucinations |
+| **Scope limiting** | System prompts that constrain assistant behavior |
+| **Fallback handling** | Graceful degradation when confidence is low |
+| **Rate limiting** | Per-user and per-session request limits |
+
+### Production Assistant Checklist
+
+- [ ] Define clear scope and personality guidelines
+- [ ] Implement conversation memory with appropriate retention
+- [ ] Add input/output guardrails and content filtering
+- [ ] Set up fallback responses for out-of-scope queries
+- [ ] Implement session management and user identification
+- [ ] Add feedback collection (thumbs up/down, corrections)
+- [ ] Monitor conversation quality metrics
+- [ ] Set up error handling with user-friendly messages
+- [ ] Test edge cases: long conversations, topic switches, adversarial inputs
 
 ---
 

@@ -150,3 +150,95 @@ One sentence: What are we building/fixing?
 - Adding a feature
 - Fixing a bug (if complex)
 - Refactoring multiple files
+- Any multi-step coding task where you need a clear, actionable checklist
+
+---
+
+## Concise Planning Workflow
+
+For quick plan generation:
+
+### 1. Scan Context
+- Read `README.md`, docs, and relevant code files
+- Identify constraints (language, frameworks, tests)
+
+### 2. Minimal Interaction
+- Ask **at most 1-2 questions** and only if truly blocking
+- Make reasonable assumptions for non-blocking unknowns
+
+### 3. Generate Plan Structure
+- **Approach**: 1-3 sentences on what and why
+- **Scope**: Bullet points for "In" and "Out"
+- **Action Items**: 6-10 atomic, ordered tasks (verb-first)
+- **Validation**: At least one item for testing
+- **Open Questions**: Max 3
+
+### Checklist Guidelines
+- **Atomic**: Each step is a single logical unit of work
+- **Verb-first**: "Add...", "Refactor...", "Verify..."
+- **Concrete**: Name specific files or modules when possible
+
+---
+
+## Detailed Implementation Plans
+
+For complex features requiring zero-context handoff, write plans assuming the engineer has zero codebase context. Document everything: which files to touch, complete code, testing, docs to check, how to verify.
+
+### Plan Document Header
+
+Every detailed plan MUST start with:
+
+```markdown
+# [Feature Name] Implementation Plan
+
+**Goal:** [One sentence describing what this builds]
+
+**Architecture:** [2-3 sentences about approach]
+
+**Tech Stack:** [Key technologies/libraries]
+```
+
+### Bite-Sized Task Granularity
+
+Each step is one action (2-5 minutes):
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
+
+### Task Structure
+
+````markdown
+### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
+
+**Step 1: Write the failing test**
+
+```python
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
+```
+
+**Step 2: Run test to verify it fails**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
+
+**Step 3: Write minimal implementation**
+
+**Step 4: Run test to verify it passes**
+
+**Step 5: Commit**
+````
+
+### Key Principles for Detailed Plans
+- Exact file paths always
+- Complete code in plan (not "add validation")
+- Exact commands with expected output
+- DRY, YAGNI, TDD, frequent commits

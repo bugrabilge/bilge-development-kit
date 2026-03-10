@@ -1,6 +1,6 @@
 ---
 name: langchain-architecture
-description: "Design LLM applications using the LangChain framework with agents, memory, and tool integration patterns. Use when building LangChain applications, implementing AI agents, or creating complex LLM w..."
+description: "Design LLM applications using LangChain and LangGraph frameworks with agents, memory, tool integration, state management, and production deployment patterns. Covers LangChain 0.1+ and LangGraph APIs."
 risk: unknown
 source: community
 ---
@@ -350,3 +350,116 @@ llm = OpenAI(streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
 - [ ] Set up observability (callbacks)
 - [ ] Implement fallback strategies
 - [ ] Version control prompts and configurations
+
+---
+
+## LangGraph State Management
+
+### State Graph Pattern
+
+```python
+from langgraph.graph import StateGraph, MessagesState, START, END
+from langgraph.prebuilt import create_react_agent
+from langchain_anthropic import ChatAnthropic
+
+class AgentState(TypedDict):
+    messages: Annotated[list, "conversation history"]
+    context: Annotated[dict, "retrieved context"]
+
+builder = StateGraph(MessagesState)
+builder.add_node("node1", node1_func)
+builder.add_node("node2", node2_func)
+builder.add_edge(START, "node1")
+builder.add_conditional_edges("node1", router, {"a": "node2", "b": END})
+builder.add_edge("node2", END)
+agent = builder.compile(checkpointer=checkpointer)
+```
+
+### Multi-Agent Orchestration with LangGraph
+
+- Use `Command[Literal["agent1", "agent2", END]]` for routing between agents
+- Supervisor agent decides next agent based on context and task requirements
+- Track progress through shared state across agent nodes
+
+## Recommended Model & Embeddings
+
+| Purpose | Model | Notes |
+|---------|-------|-------|
+| **Primary LLM** | Claude Sonnet 4.5 | Best balance of quality and speed |
+| **Embeddings** | Voyage AI `voyage-3-large` | Officially recommended for Claude |
+| **Code embeddings** | `voyage-code-3` | Optimized for code search |
+| **Domain-specific** | `voyage-finance-2`, `voyage-law-2` | Specialized domains |
+
+## Advanced RAG with LangChain
+
+### HyDE (Hypothetical Document Embeddings)
+
+Generate a hypothetical answer to the query, embed that, and use it for retrieval. Improves recall for abstract queries.
+
+### RAG Fusion
+
+Generate multiple query perspectives, retrieve for each, then merge results using Reciprocal Rank Fusion.
+
+### Reranking Pipeline
+
+```python
+from langchain_voyageai import VoyageAIEmbeddings
+from langchain_pinecone import PineconeVectorStore
+
+embeddings = VoyageAIEmbeddings(model="voyage-3-large")
+vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
+
+# Retrieve with hybrid search, then rerank
+base_retriever = vectorstore.as_retriever(
+    search_type="hybrid",
+    search_kwargs={"k": 20, "alpha": 0.5}
+)
+```
+
+## Production Deployment with FastAPI
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+
+@app.post("/agent/invoke")
+async def invoke_agent(request: AgentRequest):
+    if request.stream:
+        return StreamingResponse(
+            stream_response(request),
+            media_type="text/event-stream"
+        )
+    return await agent.ainvoke({"messages": [...]})
+```
+
+## Async Patterns
+
+Always use async methods in production for better concurrency:
+
+```python
+async def process_request(message: str, session_id: str):
+    result = await agent.ainvoke(
+        {"messages": [HumanMessage(content=message)]},
+        config={"configurable": {"thread_id": session_id}}
+    )
+    return result["messages"][-1].content
+```
+
+## Monitoring & Observability
+
+| Tool | Purpose |
+|------|---------|
+| **LangSmith** | Trace all agent executions, debug chains |
+| **Prometheus** | Track requests, latency, error rates |
+| **Structured logging** | Use `structlog` for consistent logs |
+| **Health checks** | Validate LLM, tools, memory, and external services |
+
+## LangGraph Best Practices
+
+1. **Always use async**: `ainvoke`, `astream`, `aget_relevant_documents`
+2. **Handle errors gracefully**: Try/except with fallbacks and retries
+3. **Monitor everything**: Trace, log, and collect metrics on all operations
+4. **Optimize costs**: Cache responses, set token limits, compress memory
+5. **Secure secrets**: Environment variables, never hardcode API keys
+6. **Version control state**: Use checkpointers for reproducibility
+7. **Test with evaluation suites**: Use LangSmith evaluation framework

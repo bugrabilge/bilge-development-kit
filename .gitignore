@@ -1,0 +1,10 @@
+.env
+.env.*
+*.key
+*.pem
+mcp_config.json
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+__pycache__/

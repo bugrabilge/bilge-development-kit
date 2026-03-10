@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: Socratic questioning protocol + user communication. MANDATORY for complex requests, new features, or unclear requirements. Includes progress reporting and error handling.
+description: "Socratic questioning protocol + user communication + structured multi-agent design review. MANDATORY for complex requests, new features, or unclear requirements. Includes progress reporting, error handling, and formal peer-review process."
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -159,5 +159,85 @@ allowed-tools: Read, Glob, Grep
 | Over-engineering first version | Delays value delivery |
 | Ignoring constraints | Creates unusable solutions |
 | "I think" phrases | Uncertainty → Ask instead |
+
+---
+
+## Multi-Agent Design Review (Structured Brainstorming)
+
+### Purpose
+
+Transform a single-agent design into a **robust, review-validated design** by simulating a formal peer-review process using multiple constrained agents. This prevents blind spots, false confidence, premature convergence, and idea swarm chaos.
+
+This is **sequential design review with enforced roles**, not parallel brainstorming.
+
+### Operating Model
+
+- One agent designs. Other agents review.
+- No agent may exceed its mandate.
+- Creativity is centralized; critique is distributed.
+- Decisions are explicit and logged.
+- The process is gated and terminates by design.
+
+### Agent Roles (Non-Negotiable)
+
+#### 1. Primary Designer (Lead Agent)
+- Owns the design; runs the standard brainstorming skill
+- Maintains the Decision Log
+- May NOT self-approve or ignore reviewer objections
+
+#### 2. Skeptic / Challenger Agent
+- Assumes the design will fail; identifies weaknesses and risks
+- Questions assumptions, identifies edge cases, flags overconfidence and YAGNI violations
+- May NOT propose new features or redesign the system
+- Prompting: "Assume this design fails in production. Why?"
+
+#### 3. Constraint Guardian Agent
+- Enforces non-functional constraints: performance, scalability, reliability, security, maintainability, cost
+- May reject designs that violate constraints
+- May NOT debate product goals or suggest feature changes
+
+#### 4. User Advocate Agent
+- Represents the end user: cognitive load, usability, clarity of flows, error handling
+- Flags confusing or misleading aspects, poor defaults
+- May NOT redesign architecture or add features
+
+#### 5. Integrator / Arbiter Agent
+- Resolves conflicts, finalizes decisions, enforces exit criteria
+- Accepts or rejects objections; declares the design complete
+- May NOT invent new ideas or add requirements
+
+### The Process
+
+**Phase 1 -- Single-Agent Design**
+1. Primary Designer runs standard brainstorming skill
+2. Understanding Lock completed; initial design produced
+3. Decision Log started. No other agents participate yet.
+
+**Phase 2 -- Structured Review Loop**
+Agents invoked one at a time: Skeptic -> Constraint Guardian -> User Advocate.
+- Feedback must be explicit and scoped; no new features
+- Primary Designer responds to each objection and updates Decision Log
+
+**Phase 3 -- Integration & Arbitration**
+Arbiter reviews final design, Decision Log, and unresolved objections.
+Explicitly decides which objections are accepted/rejected with rationale.
+
+### Decision Log (Mandatory Artifact)
+Must record: Decision made, alternatives considered, objections raised, resolution and rationale.
+
+### Exit Criteria (Hard Stop)
+You may exit **only when all are true**:
+- Understanding Lock completed
+- All reviewer agents invoked
+- All objections resolved or explicitly rejected
+- Decision Log complete
+- Arbiter declared design acceptable
+
+If invoked by orchestration layer, report disposition as: **APPROVED**, **REVISE**, or **REJECT** with rationale.
+
+### Failure Modes This Prevents
+- Idea swarm chaos, hallucinated consensus
+- Overconfident single-agent designs, hidden assumptions
+- Premature implementation, endless debate
 
 ---
