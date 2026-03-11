@@ -17,6 +17,8 @@
   <a href="https://buymeacoffee.com/bilgeai"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
 </p>
 
+<p align="center"><strong><a href="README.en.md">English</a> | <a href="README.md">Türkçe</a></strong></p>
+
 # Bilge Development Kit (BDK)
 
 **Tek bir AI assistant'ı, 22 uzmandan oluşan bir geliştirici ekibine dönüştürün.**
