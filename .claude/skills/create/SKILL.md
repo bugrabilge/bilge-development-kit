@@ -1,6 +1,14 @@
 ---
 name: create
-description: "Create new application command. Triggers App Builder skill and starts interactive dialogue with user."
+description: >
+  Scaffold a full-stack application from a natural language description.
+  Generates project structure, database schema, backend API, and frontend UI
+  by orchestrating specialist agents (project-planner, database-architect,
+  backend-specialist, frontend-specialist).
+
+  Use when: the user wants to create an app, build a new project, scaffold
+  an application, generate a web app, or says "create", "build me", "make
+  an app", "new project", "scaffold".
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -54,9 +62,18 @@ This command starts a new application creation process.
 
 ## Before Starting
 
-If request is unclear, ask these questions:
+If request is unclear, ask:
 - What type of application?
 - What are the basic features?
 - Who will use it?
 
-Use defaults, add details later.
+Defaults: FastAPI backend, React frontend, SQLite database. Add details later.
+
+## Error Recovery
+
+| Problem | Action |
+|---|---|
+| User request too vague | Use `conversation-manager` to clarify before planning |
+| Plan rejected by user | Revise with `project-planner`, do not proceed to build |
+| Agent fails mid-build | Retry the failing agent, do not restart from scratch |
+| Preview fails to start | Check `auto_preview.py` logs, fix config, retry |
