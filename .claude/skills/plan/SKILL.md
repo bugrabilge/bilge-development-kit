@@ -1,8 +1,11 @@
 ---
 name: plan
-description: "Create project plan using project-planner agent. No code writing - only plan file generation."
+description: >
+  Create a structured project plan from a task description.
+  Use when: "plan", "design", "architect", "outline", "break down",
+  "how should I build", "strategy", "roadmap"
+argument-hint: "<task description>"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
 # /plan - Project Planning Mode

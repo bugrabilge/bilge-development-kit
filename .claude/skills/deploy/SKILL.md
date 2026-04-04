@@ -1,6 +1,10 @@
 ---
 name: deploy
-description: "Deployment command for production releases. Pre-flight checks and deployment execution."
+description: >
+  Production deployment with pre-flight checks and verification.
+  Use when: "deploy", "ship", "release", "go live", "push to prod",
+  "publish", "launch"
+argument-hint: "[check|preview|production|rollback]"
 user-invocable: true
 disable-model-invocation: true
 ---

@@ -1,8 +1,12 @@
 ---
 name: onboard
-description: "Project onboarding. Scans tech stack, maps file structure, generates project-specific CLAUDE.md, initializes Memory Bank, and reports warnings."
+description: >
+  One-command project onboarding. Scans tech stack, maps architecture,
+  generates CLAUDE.md, initializes Memory Bank, reports warnings.
+  Use when: "onboard", "setup project", "initialize", "get started",
+  "make project-aware", "scan project"
+argument-hint: "[--skip-memory] [--dry-run]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 ---
 
 # /onboard - Project Onboarding

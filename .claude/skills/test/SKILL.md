@@ -1,6 +1,10 @@
 ---
 name: test
-description: "Test generation and test running command. Creates and executes tests for code."
+description: >
+  Test generation and execution with coverage analysis.
+  Use when: "test", "write tests", "run tests", "coverage",
+  "unit test", "test this", "add tests"
+argument-hint: "<file/feature|coverage|watch>"
 user-invocable: true
 disable-model-invocation: true
 ---

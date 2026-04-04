@@ -1,8 +1,11 @@
 ---
 name: build-fix
-description: "Build error diagnosis and resolution. Parses compiler/bundler errors, identifies patterns, and applies targeted fixes."
+description: >
+  Build error diagnosis and resolution.
+  Use when: "build failed", "compile error", "bundler error",
+  "fix build", "npm error", "type error", "won't compile"
+argument-hint: "[error message or file]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Build Error Resolution Knowledge Base

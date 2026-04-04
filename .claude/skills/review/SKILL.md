@@ -1,6 +1,10 @@
 ---
 name: review
-description: "Code review command. Performs comprehensive code review using multiple specialist agents."
+description: >
+  Comprehensive code review with multi-agent analysis.
+  Use when: "review", "code review", "check my code", "review PR",
+  "audit code", "is this good", "review changes"
+argument-hint: "[file/dir|pr|security|performance]"
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -35,7 +39,11 @@ When `/review` is triggered:
 
 1. **Identify scope**
    - What files/changes to review
-   - Use `git diff` for recent changes or target specific files
+   - Auto-collect context using tools:
+     1. Run `git branch --show-current`
+     2. Run `git diff --cached --stat`
+     3. Run `git diff --stat`
+     4. Run `git log --oneline -5`
 
 2. **Multi-agent analysis**
    Invoke relevant agents based on file types:

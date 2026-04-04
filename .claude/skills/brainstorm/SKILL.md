@@ -1,8 +1,12 @@
 ---
 name: brainstorm
-description: "Structured brainstorming for projects and features. Explores multiple options with pros/cons before implementation."
+description: >
+  Structured brainstorming with multiple approaches and tradeoffs.
+  Use when: "brainstorm", "explore options", "what are my options",
+  "compare approaches", "pros and cons", "which is better",
+  "how should I", "alternatives"
+argument-hint: "<topic or question>"
 user-invocable: true
-allowed-tools: Read, Glob, Grep
 ---
 
 # /brainstorm - Structured Idea Exploration

@@ -1,6 +1,10 @@
 ---
 name: ui-ux-pro-max
-description: "AI-powered design intelligence with 50+ styles, 95+ color palettes, and automated design system generation"
+description: >
+  AI-powered design system with 50+ styles, 95+ palettes, 57 font pairings.
+  Use when: "design", "UI", "UX", "design system", "color palette",
+  "typography", "landing page design", "make it beautiful"
+argument-hint: "<design query or product description>"
 user-invocable: true
 disable-model-invocation: true
 ---

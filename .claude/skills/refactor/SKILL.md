@@ -1,6 +1,10 @@
 ---
 name: refactor
-description: "Refactoring command. Safe, systematic code modernization using code-archaeologist and relevant specialist agents."
+description: >
+  Safe, systematic code refactoring with test safety net.
+  Use when: "refactor", "clean up", "simplify", "modernize",
+  "extract", "rename across", "reduce complexity", "tech debt"
+argument-hint: "<file/dir|analyze|extract|rename|modernize|types>"
 user-invocable: true
 disable-model-invocation: true
 ---

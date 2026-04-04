@@ -1,6 +1,10 @@
 ---
 name: debug
-description: "Debugging command. Activates DEBUG mode for systematic problem investigation."
+description: >
+  Systematic debugging with hypothesis-driven investigation.
+  Use when: "debug", "not working", "bug", "broken", "error",
+  "unexpected behavior", "fix issue", "investigate"
+argument-hint: "<issue description>"
 user-invocable: true
 disable-model-invocation: true
 ---

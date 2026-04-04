@@ -1,8 +1,11 @@
 ---
 name: remember
-description: "Memory Bank system. Scans project, captures patterns, decisions, and active context for cross-session persistence."
+description: >
+  Memory Bank system for cross-session persistence.
+  Use when: "remember", "save context", "memory bank", "persist",
+  "session context", "what did we do", "update memory"
+argument-hint: "[context|patterns|decisions|issues|status]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 ---
 
 # /remember - Memory Bank System
@@ -36,7 +39,13 @@ When `/remember` is triggered:
 
 ### 1. Scan Project
 
-Analyze the project to understand:
+Auto-collect live context first using tools:
+
+1. **Branch**: Run `git branch --show-current`
+2. **Recent commits**: Run `git log --oneline -10`
+3. **Changed files**: Run `git diff --name-only HEAD~5`
+
+Then analyze the project to understand:
 - **Tech stack**: package.json, requirements.txt, go.mod, Cargo.toml, etc.
 - **Architecture**: folder structure, naming conventions, file organization
 - **Patterns**: recurring code patterns, import styles, state management approach

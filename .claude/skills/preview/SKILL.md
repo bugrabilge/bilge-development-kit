@@ -1,6 +1,10 @@
 ---
 name: preview
-description: "Preview server start, stop, and status check. Local development server management."
+description: >
+  Local development server management.
+  Use when: "preview", "start server", "localhost", "dev server",
+  "run app", "start app", "stop server"
+argument-hint: "[start|stop|restart|check]"
 user-invocable: true
 disable-model-invocation: true
 ---

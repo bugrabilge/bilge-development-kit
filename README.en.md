@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Agents-22-blue" alt="Agents">
   <img src="https://img.shields.io/badge/Core_Skills-56-green" alt="Core Skills">
   <img src="https://img.shields.io/badge/Extra_Skills-37-lightgrey" alt="Extra Skills">
-  <img src="https://img.shields.io/badge/Workflows-17-orange" alt="Workflows">
+  <img src="https://img.shields.io/badge/Slash_Commands-20-orange" alt="Slash Commands">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
   <br>
   <img src="https://img.shields.io/badge/Claude_Code-Compatible-blueviolet" alt="Claude Code">
@@ -26,7 +26,7 @@
 BDK is a modular toolkit that gives AI coding assistants like Claude Code and Gemini expert behaviors, automatic security guardrails, and structured workflows. It has zero runtime dependencies -- it's entirely made of markdown files and shell scripts. Copy the `.agent/` directory into your project, and your AI assistant instantly knows which expert to invoke, which rules to apply, and which security checks to run.
 
 ```
-22 Agents | 56 Core Skills | 37 Extra Skills | 17 Workflows | 4 Hooks | 5 Rules | 3 Contexts
+22 Agents | 56 Core Skills | 37 Extra Skills | 20 Slash Commands | 4 Hooks | 5 Rules | 3 Contexts
 ```
 
 ---
@@ -38,7 +38,7 @@ BDK is a modular toolkit that gives AI coding assistants like Claude Code and Ge
 - [Architecture](#architecture)
 - [Agents (22)](#agents-22)
 - [Skills (56 Core + 37 Extra)](#skills-56-core--37-extra)
-- [Slash Commands (20)](#slash-commands-20)
+- [Slash Commands (22)](#slash-commands-22)
 - [Hooks -- Automatic Guardrails (4)](#hooks----automatic-guardrails-4)
 - [Memory Bank](#memory-bank--cross-session-persistence)
 - [Always-On Rules (5)](#always-on-rules-5)
@@ -133,7 +133,7 @@ Copy-Item -Recurse bilge-development-kit\.claude your-project\.claude   # For sl
 │
 ├── .claude/
 │   ├── settings.json            # Hooks configuration
-│   └── skills/                  # 17 Workflow Skills
+│   └── skills/                  # 20 Slash Command Skills
 │       ├── brainstorm/
 │       ├── build-fix/
 │       ├── onboard/
@@ -141,7 +141,7 @@ Copy-Item -Recurse bilge-development-kit\.claude your-project\.claude   # For sl
 │       ├── remember/
 │       └── ...
 │
-├── workflows/                   # 17 Slash Commands
+├── workflows/                   # 17 Workflow References
 │   ├── brainstorm.md            #   /brainstorm
 │   ├── create.md                #   /create
 │   ├── build-fix.md             #   /build-fix
@@ -297,9 +297,9 @@ AI/LLM tools (langchain, langfuse, langgraph, rag-engineer, llm-evaluation), ML/
 
 ---
 
-## Slash Commands (20)
+## Slash Commands (22)
 
-Structured workflows triggered by typing `/command` in chat. 17 workflow commands + 3 skill commands.
+Structured workflows triggered by typing `/command` in chat. 20 workflow commands + 3 skill commands (Claude Code built-in).
 
 ### Workflow Commands
 
@@ -322,6 +322,9 @@ Structured workflows triggered by typing `/command` in chat. 17 workflow command
 | `/build-fix` | Auto-detects and fixes build/compile errors. Parses error output, matches against common patterns (missing dependency, type error, import error, version conflict), and applies fixes. Retries up to 3 iterations if unsuccessful. | `/build-fix` |
 | `/onboard` | Full project onboarding with a single command. Detects tech stack, maps directory structure, summarizes key files, generates project-specific CLAUDE.md, initializes Memory Bank, and reports issues (missing .gitignore, .env leak, no tests/CI). | `/onboard` |
 | `/remember` | Memory Bank system. Scans the project to capture patterns, architectural decisions, active context, and resolved issues into persistent files. Claude auto-reads these files when a new session opens -- providing cross-session memory. Sub-commands: `/remember context`, `/remember patterns`, `/remember decisions`, `/remember issues`, `/remember status`. | `/remember` |
+| `/audit` | Full codebase health analysis. Examines architecture patterns, dependency risks, complexity hotspots, and tech debt inventory. Provides a Health Score out of 100. Sub-commands: `/audit architecture`, `/audit dependencies`, `/audit complexity`, `/audit tech-debt`, `/audit size`. | `/audit` |
+| `/create-skill` | Generates a new slash command (skill) from a natural language description. Produces a properly structured SKILL.md with appropriate frontmatter, behavior rules, and output format. Validates the 250-char description budget limit. | `/create-skill changelog` |
+| `/push` | Safe push pipeline. Secret scanning, debug statement check, lint, test validation (including coverage quality), smart commit message (Conventional Commits), and push. Prevents broken code and leaked secrets from reaching remote. Sub-commands: `/push check`, `/push --force`, `/push --amend`. | `/push` |
 
 ### Skill Commands
 

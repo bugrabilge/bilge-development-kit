@@ -1,6 +1,10 @@
 ---
 name: orchestrate
-description: "Coordinate multiple agents for complex tasks. Use for multi-perspective analysis, comprehensive reviews, or tasks requiring different domain expertise."
+description: >
+  Coordinate 3+ specialist agents for complex multi-domain tasks.
+  Use when: "orchestrate", "full stack", "coordinate agents",
+  "multi-agent", "complex task", "end to end"
+argument-hint: "<complex task description>"
 user-invocable: true
 disable-model-invocation: true
 ---

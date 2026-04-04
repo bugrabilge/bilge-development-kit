@@ -1,6 +1,9 @@
 ---
 name: status
-description: "Display agent and project status. Progress tracking and status board."
+description: >
+  Display project and agent status with live data.
+  Use when: "status", "progress", "what's running", "where are we",
+  "show state", "dashboard"
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -81,6 +84,14 @@ Show current project and agent status.
 ```
 
 ---
+
+## Auto-Collected Context
+
+Before displaying status, gather live data using tools:
+
+1. **Branch**: Run `git branch --show-current`
+2. **Last commit**: Run `git log --oneline -1`
+3. **Changed files**: Run `git status --short`
 
 ## Technical
 

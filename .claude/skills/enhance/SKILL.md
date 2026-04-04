@@ -1,6 +1,10 @@
 ---
 name: enhance
-description: "Add or update features in existing application. Used for iterative development."
+description: >
+  Add or update features in an existing application.
+  Use when: "enhance", "add feature", "update", "improve", "extend",
+  "integrate", "make it", "add support for", "upgrade"
+argument-hint: "<feature to add or update>"
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -31,7 +35,6 @@ This command adds features or makes updates to existing application.
    "To add admin panel:
    - I'll create 15 new files
    - Update 8 files
-   - Takes ~10 minutes
 
    Should I start?"
    ```

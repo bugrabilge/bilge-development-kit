@@ -1,6 +1,10 @@
 ---
 name: security
-description: "Security audit command. Runs comprehensive security analysis using security-auditor and penetration-tester agents."
+description: >
+  Comprehensive security audit with OWASP Top 10 analysis.
+  Use when: "security", "vulnerability", "audit", "pentest",
+  "check secrets", "is it secure", "owasp", "security scan"
+argument-hint: "[quick|auth|deps|owasp]"
 user-invocable: true
 disable-model-invocation: true
 ---

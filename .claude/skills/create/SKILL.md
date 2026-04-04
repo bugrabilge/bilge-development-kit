@@ -1,6 +1,10 @@
 ---
 name: create
-description: "Create new application command. Triggers App Builder skill and starts interactive dialogue with user."
+description: >
+  Scaffold a new application with interactive dialogue.
+  Use when: "create", "build me", "make an app", "new project",
+  "scaffold", "generate app", "start new"
+argument-hint: "<app description>"
 user-invocable: true
 disable-model-invocation: true
 ---
