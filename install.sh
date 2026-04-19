@@ -7,10 +7,13 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET="${1:-.}"
 
-# Resolve target to absolute path
-TARGET="$(cd "$TARGET" 2>/dev/null && pwd || echo "$TARGET")"
+# Convert Windows backslashes to forward slashes
+TARGET="${TARGET//\\//}"
 
-if [ ! -d "$TARGET" ]; then
+# Resolve target to absolute path
+if [ -d "$TARGET" ]; then
+  TARGET="$(cd "$TARGET" && pwd)"
+else
   echo "Error: Target directory '$TARGET' does not exist."
   exit 1
 fi
@@ -20,35 +23,21 @@ if [ "$SCRIPT_DIR" = "$TARGET" ]; then
   exit 1
 fi
 
+echo ""
+echo "  BDK Installer"
+echo "  Target: $TARGET"
+echo ""
+
 # Check if .agent/ already exists
 if [ -d "$TARGET/.agent" ]; then
-  echo "Warning: $TARGET/.agent already exists."
-  read -p "Overwrite? (y/N): " CONFIRM
-  if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
-    echo "Aborted."
+  echo "  Warning: .agent/ already exists."
+  read -p "  Overwrite? (Y/n): " CONFIRM
+  if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "N" ]; then
+    echo "  Aborted."
     exit 0
   fi
   rm -rf "$TARGET/.agent"
 fi
-
-# Check if .claude/ already exists
-if [ -d "$TARGET/.claude" ]; then
-  echo "Warning: $TARGET/.claude already exists."
-  read -p "Overwrite? (y/N): " CONFIRM
-  if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
-    echo "Skipping .claude/ (keeping existing)"
-  else
-    rm -rf "$TARGET/.claude"
-    cp -r "$SCRIPT_DIR/.claude" "$TARGET/.claude"
-    echo "  [+] .claude/ copied to project root"
-  fi
-else
-  cp -r "$SCRIPT_DIR/.claude" "$TARGET/.claude"
-  echo "  [+] .claude/ copied to project root"
-fi
-
-echo "Installing BDK to: $TARGET"
-echo ""
 
 # Copy .agent/ (main toolkit)
 cp -r "$SCRIPT_DIR" "$TARGET/.agent"
@@ -57,15 +46,31 @@ echo "  [+] .agent/ copied"
 # Remove nested .git if exists
 rm -rf "$TARGET/.agent/.git"
 
-# Remove install scripts from .agent/ (not needed inside project)
+# Remove install scripts from .agent/
 rm -f "$TARGET/.agent/install.sh"
 rm -f "$TARGET/.agent/install.ps1"
-echo "  [+] cleaned up"
 
+# Check if .claude/ already exists
+if [ -d "$TARGET/.claude" ]; then
+  echo "  Warning: .claude/ already exists."
+  read -p "  Overwrite? (Y/n): " CONFIRM
+  if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "N" ]; then
+    echo "  [~] .claude/ kept (existing)"
+  else
+    rm -rf "$TARGET/.claude"
+    cp -r "$SCRIPT_DIR/.claude" "$TARGET/.claude"
+    echo "  [+] .claude/ copied"
+  fi
+else
+  cp -r "$SCRIPT_DIR/.claude" "$TARGET/.claude"
+  echo "  [+] .claude/ copied"
+fi
+
+echo "  [+] cleaned up"
 echo ""
-echo "BDK installed successfully!"
+echo "  BDK installed successfully!"
 echo ""
-echo "Next steps:"
-echo "  1. cd $TARGET"
-echo "  2. Run /onboard to initialize project context"
+echo "  Next steps:"
+echo "    cd $TARGET"
+echo "    /onboard"
 echo ""
